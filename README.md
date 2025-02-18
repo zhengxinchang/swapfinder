@@ -3,7 +3,10 @@
 
 ## Project Overview
 
-`swapfinder` is a tool for fast identification of sample swaps. It achieves this by calculating and comparing SNP barcodes of samples.
+`swapfinder` is a tool for the fast identification of sample swaps. It achieves this by calculating and comparing SNP barcodes of samples.
+
+It is inspired by [CCLHunter], which is a web-based tool for identifying cancer cell lines. `swapfinder` uses the SNP barcode from the CCLHunter project but provides a command-line tool for users to identify any sample swaps.
+
 
 ## Features
 
@@ -15,7 +18,7 @@
 1. Ensure you have Rust and Cargo installed. Then, you can clone and build the project with the following commands:
 
 ```sh
-git clone https://github.com/yourusername/swapfinder.git
+git clone https://github.com/zhengxinchang/swapfinder.git
 cd swapfinder
 cargo build --release
 ```
@@ -34,8 +37,11 @@ swapfinder barcode -B <barcode_file> -b <input_bam_or_cram> -o <output_file> [--
 Parameters:
 
 `-B, --barcode <barcode_file>`: Barcode file
-`-b, --bam <input_bam_or_cram>`: Input BAM or CRAM file
+
+`-b, --bam <input_bam_or_cram>`: Input BAM or CRAM file, **MUST BE SORTED**
+
 `-o, --output <output_file>`: Output file
+
 `--reference <reference_file>`: Reference file (only for CRAM format)
 
 
@@ -49,6 +55,7 @@ swapfinder compare -b <barcode_file1> -b <barcode_file2> -o <output_file>
 Parameters:
 
 `-b, --barcode <barcode_file>`: Barcode file, can specify multiple
+
 `-o, --output <output_file>`: Output file
 
 ## Examples
