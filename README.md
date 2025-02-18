@@ -50,11 +50,15 @@ You can compare SNP barcodes of multiple samples with the following command:
 
 ```sh
 swapfinder compare -b <barcode_file1> -b <barcode_file2> -o <output_file>
+
+swapfinder compare -B <barcode_files> -o <output_file>
 ```
 
 Parameters:
 
 `-b, --barcode <barcode_file>`: Barcode file, can specify multiple
+
+`-B, --barcode_files <barcode_files>`: File containing a list of barcode files, mutrually exclusive with `-b`
 
 `-o, --output <output_file>`: Output file
 
