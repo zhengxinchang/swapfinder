@@ -12,13 +12,16 @@
 
 ## Installation
 
-Ensure you have Rust and Cargo installed. Then, you can clone and build the project with the following commands:
+1. Ensure you have Rust and Cargo installed. Then, you can clone and build the project with the following commands:
 
 ```sh
 git clone https://github.com/yourusername/swapfinder.git
 cd swapfinder
 cargo build --release
 ```
+
+2. Download the pre-built binaries from the [releases page](https://github.com/zhengxinchang/swapfinder/releases)
+
 
 ## Usage
 Calculate SNP Barcode
