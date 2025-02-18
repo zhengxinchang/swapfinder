@@ -1,7 +1,7 @@
 # swapfinder
 
 
-## Project Overview
+
 
 Sample swaps are an unavoidable issue in sequencing. There are already some tools available for identification, such as [NGScheckmate](https://pmc.ncbi.nlm.nih.gov/articles/PMC5499645/#ref-list1), [Crosscheck](https://pubmed.ncbi.nlm.nih.gov/32728101/), and [idcheck](https://pubmed.ncbi.nlm.nih.gov/23559639/). However, there is still a room for improvement in terms of speed, accuracy, and ease of use.
 
