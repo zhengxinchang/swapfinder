@@ -27,38 +27,40 @@ cargo build --release
 
 
 ## Usage
-Calculate SNP Barcode
+
+# Calculate SNP Barcode
+
 You can calculate the SNP barcode for a given sample with the following command:
 
 ```sh
-swapfinder barcode -B <barcode_file> -b <input_bam_or_cram> -o <output_file> [--reference <reference_file>]
+swapfinder barcode -b <barcode_file> -i <input_bam_or_cram> -o <output_file> [-r <reference_file>]
 ```
 
 Parameters:
 
-`-B, --barcode <barcode_file>`: Barcode file
+`-b, --barcode <barcode_file>`: Barcode file
 
-`-b, --bam <input_bam_or_cram>`: Input BAM or CRAM file, **MUST BE SORTED**
+`-i, --bam <input_bam_or_cram>`: Input BAM or CRAM file, **MUST BE SORTED**
 
 `-o, --output <output_file>`: Output file
 
-`--reference <reference_file>`: Reference file (only for CRAM format)
+`-r <reference_file>`: Reference file (only for CRAM format)
 
 
 ## Compare SNP Barcodes
 You can compare SNP barcodes of multiple samples with the following command:
 
 ```sh
-swapfinder compare -b <barcode_file1> -b <barcode_file2> -o <output_file>
+swapfinder compare -i <barcode_file1> -i <barcode_file2> -o <output_file>
 
-swapfinder compare -B <barcode_files> -o <output_file>
+swapfinder compare -I <barcode_files> -o <output_file>
 ```
 
 Parameters:
 
-`-b, --barcode <barcode_file>`: Barcode file, can specify multiple
+`-i, --barcode <barcode_file>`: Barcode file, can specify multiple
 
-`-B, --barcode_files <barcode_files>`: File containing a list of barcode files, mutrually exclusive with `-b`
+`-I, --barcode_files <barcode_files>`: File containing a list of barcode files, mutrually exclusive with `-i`
 
 `-o, --output <output_file>`: Output file
 
@@ -69,17 +71,17 @@ Calculate SNP Barcode
 ```sh
 
 # barcodes.txt can be found at barcodes/ directory with different reference version.
-swapfinder barcode -B barcodes.txt -b sample1.bam -o sample1_barcode.txt --reference reference.fa
+swapfinder barcode -b barcodes.txt -i sample1.bam -o sample1_barcode.txt -r reference.fa
 ```
 Compare SNP Barcodes
 
 ```sh
 
 # use -b option to specify multiple barcode files
-swapfinder compare -b sample1_barcode.txt -b sample2_barcode.txt -o comparison.txt
+swapfinder compare -i sample1_barcode.txt -i sample2_barcode.txt -o comparison.txt
 
 # use -B option to specify a file containing a list of barcode files
-swapfinder compare -B barcode_files.txt -o comparison.txt
+swapfinder compare -I barcode_files.txt -o comparison.txt
 ```
 
 

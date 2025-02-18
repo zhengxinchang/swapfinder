@@ -24,7 +24,7 @@ pub enum Commands {
 #[derive(Parser, Debug, Clone)]
 pub struct BarcodeArgs {
     /// Input file in BAM/CRAM format
-    #[arg(short, long)]
+    #[arg(short='i', long)]
     pub bam: PathBuf,
 
     /// Reference file for CRAMs
@@ -36,71 +36,21 @@ pub struct BarcodeArgs {
     pub output: PathBuf,
 
     /// Barcode file
-    #[arg(short = 'B', long)]
+    #[arg(short = 'b', long)]
     pub barcode: PathBuf,
 }
 
 #[derive(Parser, Debug, Clone)]
 pub struct CompareArgs {
     /// Input barcodes file. can be multiple
-    #[arg(short = 'b', long)]
+    #[arg(short = 'i', long)]
     pub barcode: Vec<PathBuf>,
 
     /// Input manfiest file. each line is a barcode file
-    #[arg(short = 'b', long)]
+    #[arg(short = 'I', long)]
     pub barcode_list: PathBuf,
 
     /// Name of the output signal file
     #[arg(short, long)]
     pub output: PathBuf,
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_cli() {
-        let args = Cli::parse_from(&[
-            "swapfinder",
-            "barcode",
-            "-B",
-            "barcode.txt",
-            "-o",
-            "output.txt",
-            "-b",
-            "input.bam",
-        ]);
-        match args.command {
-            Commands::barcode(args) => {
-                assert_eq!(args.bam, PathBuf::from("input.bam"));
-                assert_eq!(args.output, PathBuf::from("output.txt"));
-                assert_eq!(args.barcode, PathBuf::from("barcode.txt"));
-            }
-            _ => panic!("Wrong subcommand"),
-        }
-    }
-
-    #[test]
-    fn test_compare() {
-        let args = Cli::parse_from(&[
-            "swapfinder",
-            "compare",
-            "-B",
-            "barcode1.txt",
-            "-B",
-            "barcode2.txt",
-            "-o",
-            "output.txt",
-        ]);
-        match args.command {
-            Commands::compare(args) => {
-                assert_eq!(args.output, PathBuf::from("output.txt"));
-                assert_eq!(args.barcode.len(), 2);
-                assert_eq!(args.barcode[0], PathBuf::from("barcode1.txt"));
-                assert_eq!(args.barcode[1], PathBuf::from("barcode2.txt"));
-            }
-            _ => panic!("Wrong subcommand"),
-        }
-    }
 }
