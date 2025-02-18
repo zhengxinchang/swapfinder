@@ -79,10 +79,10 @@ Compare SNP Barcodes
 
 ```sh
 
-# use -b option to specify multiple barcode files
+# use -i option to specify multiple barcode files
 swapfinder compare -i sample1_barcode.txt -i sample2_barcode.txt -o comparison.txt
 
-# use -B option to specify a file containing a list of barcode files
+# use -I option to specify a file containing a list of barcode files
 swapfinder compare -I barcode_files.txt -o comparison.txt
 ```
 
