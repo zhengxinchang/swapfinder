@@ -2,7 +2,7 @@
 
 
 <div style="display: flex; align-items: center;">
-    <img src="/img/logo.png" alt="logo" style="width: 100px; margin-right: 20px;">
+    <img src="/img/logo.png" alt="logo" style="width: 150px; margin-right: 20px;">
     <div>
         Sample swaps are an unavoidable issue in sequencing. There are already some tools available for identification, such as <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5499645/#ref-list1">NGScheckmate</a>, <a href="https://pubmed.ncbi.nlm.nih.gov/32728101/">Crosscheck</a>, and <a href="https://pubmed.ncbi.nlm.nih.gov/23559639/">idcheck</a>. However, there is still room for improvement in terms of speed, accuracy, and ease of use.
         <br><br>
