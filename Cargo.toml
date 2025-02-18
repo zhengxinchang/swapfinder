@@ -1,0 +1,9 @@
+[package]
+name = "swapfinder"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rust-htslib = "=0.48.0"
+indexmap = {version="2.6.0",features=["serde"]}
+clap = { version = "4.0", features = ["derive"] }
