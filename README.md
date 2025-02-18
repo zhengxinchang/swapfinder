@@ -85,6 +85,19 @@ swapfinder compare -I barcode_files.txt -o comparison.txt
 ```
 
 
+
+## SNP Barcode selection criteria
+
+The screening criteria revolve around the ability to be inherited as stably as possible, and the accuracy problems caused by sequence complexity are minimized. 436 SNP sites and corresponding genes were filtered for building the SNP barcode.
+1) Each allele should be located within the CDS regions of recognized coding genes.
+2) Each allele should be recognized as a biallelic variant, meaning that only two variants (including its reference) could appear in this location, as determined by the dbSNP ALFA project's statistics (build id 20201027095038), and its variation type should be a transversion.
+3) The allele frequency of each locus in dbSNP should fall within the range of 0.4–0.6.
+4) The allele frequency of each locus in our curated CCLs should also fall within the range of 0.4–0.6.
+5) Each locus should not be within the tandem repeat regions identified by the tandem repeat finder with default parameters.
+6) Each SNP should not be located within the linkage disequilibrium regions.
+7) Only the one farthest from the CDS boundary will be retained if two or more alleles are located on the same coding gene.
+
+
 ## Contributing
 
 Contributions are welcome! Please fork this repository and submit a pull request.
