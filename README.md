@@ -86,3 +86,16 @@ Contributions are welcome! Please fork this repository and submit a pull request
 ## License
 This project is open-source under the MIT license. For more details, please refer to the LICENSE file.
 
+## Citation
+
+If you use `swapfinder` in your research, please cite the following paper:
+
+```bibtex
+@article{zheng2021swapfinder,
+  title={CCLHunter: An efficient toolkit for cancer cell line authentication},
+  author={Congfan Bu, Xinchang Zheng, Jialin Mai, Zhi Nie, Jingyao Zeng, Qiheng Qian, Tianyi Xu, Yanling Sun, Yiming Bao, Jingfa Xiao},
+  journal={Computational and Structural Biotechnology Journal},
+  year={2023},
+  publisher={Elsevier}
+}
+```
