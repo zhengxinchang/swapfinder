@@ -3,6 +3,8 @@
 
 ## Project Overview
 
+Sample swaps are an unavoidable issue in sequencing. There are already some tools available for identification, such as [NGScheckmate](https://pmc.ncbi.nlm.nih.gov/articles/PMC5499645/#ref-list1), [Crosscheck](https://pubmed.ncbi.nlm.nih.gov/32728101/), and [idcheck](https://pubmed.ncbi.nlm.nih.gov/23559639/). However, there is still a room for improvement in terms of speed, accuracy, and ease of use.
+
 `swapfinder` is a tool for the fast identification of sample swaps. It achieves this by calculating and comparing SNP barcodes of samples.
 
 It is inspired by [CCLHunter], which is a web-based tool for identifying cancer cell lines. `swapfinder` uses the SNP barcode from the CCLHunter project but provides a command-line tool for users to identify any sample swaps.
