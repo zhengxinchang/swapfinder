@@ -132,7 +132,7 @@ This is because the libcurl need SSL certificate to verify the server. You can f
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 ```
 
-This issue also was mentioned in the [htslib issue](https://github.com/rust-bio/rust-htslib/issues/404).
+This issue also was mentioned in the [rust-htslib issue](https://github.com/rust-bio/rust-htslib/issues/404).
 
 
 
