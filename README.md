@@ -119,7 +119,7 @@ The screening criteria revolve around the ability to be inherited as stably as p
 
 ## TroubleShooting
 
-1. If you encounter the following error when proccssing the bam/cram from URL:
+1.If you encounter the following error when proccssing the bam/cram from URL:
 
 ```sh
 [E::easy_errno] Libcurl reported error 60 (SSL peer certificate or SSH remote key was not OK)
@@ -128,6 +128,7 @@ The screening criteria revolve around the ability to be inherited as stably as p
 This is because the libcurl need SSL certificate to verify the server. You can fix it by export the following environment variable:
 
 ```sh
+# make sure the path is correct
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 ```
 
