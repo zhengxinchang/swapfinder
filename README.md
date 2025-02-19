@@ -117,6 +117,24 @@ The screening criteria revolve around the ability to be inherited as stably as p
 7) Only the one farthest from the CDS boundary will be retained if two or more alleles are located on the same coding gene.
 
 
+## TroubleShooting
+
+1. If you encounter the following error when proccssing the bam/cram from URL:
+
+```sh
+[E::easy_errno] Libcurl reported error 60 (SSL peer certificate or SSH remote key was not OK)
+```
+
+This is because the libcurl need SSL certificate to verify the server. You can fix it by export the following environment variable:
+
+```sh
+export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+```
+
+This issue also was mentioned in the [htslib issue](https://github.com/rust-bio/rust-htslib/issues/404).
+
+
+
 ## Contributing
 
 Contributions are welcome! Please fork this repository and submit a pull request.
