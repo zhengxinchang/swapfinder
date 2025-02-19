@@ -41,7 +41,7 @@ cargo build --release
 
 ## Usage
 
-# Calculate SNP Barcode
+### Calculate SNP Barcode
 
 You can calculate the SNP barcode for a given sample with the following command:
 
@@ -60,7 +60,7 @@ Parameters:
 `-r <reference_file>`: Reference file (only for CRAM format)
 
 
-## Compare SNP Barcodes
+### Compare SNP Barcodes
 You can compare SNP barcodes of multiple samples with the following command:
 
 ```sh
