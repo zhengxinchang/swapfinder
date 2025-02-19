@@ -1,25 +1,35 @@
 //! This file is used to parse the BAM file, fetch reads that located in a given region
 //!
 
-use std::{
-    fs::File,
-    io::{Read, Write},
-};
+use std::{env, fs::File, io::Write};
 
 use rust_htslib::bam::{self, Read as BAMRead};
 
 use crate::{barcode::BarcodeList, cli::BarcodeArgs};
 
+use url::Url;
+
+// use rust_htslib::tpool::*;
+
+// use clap::Parser::Url;
+
 pub fn check_file_format(path: &str) -> Result<String, std::io::Error> {
-    let mut file = File::open(path)?;
-    let mut buffer = [0u8; 4];
+    // check the suffix of the file
+    let suffix = path.split('.').last().unwrap();
+    let suffix = suffix.to_uppercase();
 
-    file.read_exact(&mut buffer)?;
+    eprint!("processing file format: {}", suffix);
 
-    match &buffer {
-        b"BAM\x01" => Ok("BAM".to_string()),
-        b"CRAM" => Ok("CRAM".to_string()),
-        _ => Ok("Unknown".to_string()),
+    // check if the file is a bam file or cram file
+    if suffix == "BAM" {
+        Ok("BAM".to_string())
+    } else if suffix == "CRAM" {
+        Ok("CRAM".to_string())
+    } else {
+        Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "Unknown file format",
+        ))
     }
 }
 
@@ -86,11 +96,38 @@ pub fn vec2genotype(bases: &[char]) -> String {
     }
 }
 
+fn is_url(s: &str) -> bool {
+    s.starts_with("http://")
+        || s.starts_with("https://")
+        || s.starts_with("s3://")
+        || s.starts_with("ftp://")
+}
+
 pub fn calculate_barcode(args: BarcodeArgs) {
     let mut barcode_list = BarcodeList::new();
     barcode_list.load(args.barcode.to_str().unwrap());
 
-    let mut bam = bam::IndexedReader::from_path(&args.bam).unwrap();
+    if env::var("CURL_CA_BUNDLE").is_err() {
+        env::set_var("CURL_CA_BUNDLE", "/etc/ssl/certs/ca-certificates.crt");
+    }
+
+    let bam = if is_url(&args.bam.to_str().unwrap()) {
+        let url = Url::parse(&args.bam.to_str().unwrap()).unwrap();
+        let b = bam::IndexedReader::from_url(&url);
+        b
+    } else {
+        bam::IndexedReader::from_path(&args.bam)
+    };
+
+    // read bam and print error if failed
+    let mut bam = match bam {
+        Ok(bam) => bam,
+        Err(e) => {
+            eprintln!("Error reading bam file: {}\n", e);
+            std::process::exit(1);
+        }
+    };
+
     let header_view = bam.header().to_owned();
 
     // check if tname is start with chr
@@ -104,6 +141,8 @@ pub fn calculate_barcode(args: BarcodeArgs) {
 
     let mut base_vec = Vec::new();
     for barcode in &barcode_list.barcode_list {
+        eprint!("fetching barcode: {}:{}\n", barcode.chrom, barcode.pos);
+
         let query_pos = if has_chr {
             format!("chr{}:{}-{}", barcode.chrom, barcode.pos, barcode.pos + 1)
         } else {
@@ -135,9 +174,17 @@ pub fn calculate_barcode(args: BarcodeArgs) {
 
     let mut output = File::create(args.output).unwrap();
     let filename = args.bam.file_name().unwrap().to_str().unwrap();
-    output
-        .write_all(format!("#{}\n", filename).as_bytes())
-        .unwrap();
+
+    if let Some(sample) = &args.sample_name {
+        output
+            .write_all(format!("#{}\n", sample).as_bytes())
+            .unwrap();
+    } else {
+        output
+            .write_all(format!("#{}\n", filename).as_bytes())
+            .unwrap();
+    }
+
     output
         .write_all(b"#rsid\tgene\tchrom\tpos\tgenotype\n")
         .unwrap();

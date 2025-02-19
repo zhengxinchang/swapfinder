@@ -35,6 +35,13 @@ pub struct BarcodeArgs {
     #[arg(short, long)]
     pub output: PathBuf,
 
+    /// Sample name(optional)
+    /// if not provided, the sample name will be the file name
+    #[arg(short, long)]
+    pub sample_name: Option<String>,
+
+
+
     /// Barcode file
     #[arg(short = 'b', long)]
     pub barcode: PathBuf,
@@ -44,13 +51,14 @@ pub struct BarcodeArgs {
 pub struct CompareArgs {
     /// Input barcodes file. can be multiple
     #[arg(short = 'i', long)]
-    pub barcode: Vec<PathBuf>,
+    pub barcode: Option<Vec<PathBuf>>,
 
     /// Input manfiest file. each line is a barcode file
     #[arg(short = 'I', long)]
-    pub barcode_list: PathBuf,
+    pub barcode_list: Option<PathBuf>,
+
 
     /// Name of the output signal file
     #[arg(short, long)]
-    pub output: PathBuf,
+    pub output: Option<PathBuf>,
 }
