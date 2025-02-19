@@ -29,7 +29,7 @@ It is inspired by [CCLHunter](https://doi.org/10.1016/j.csbj.2023.09.040), which
 4. Supports BAM and CRAM formats.
 5. Supports multiple distance calculation methods.
 6. Supports reading BAM files from URLs.
-
+7. Supports custom SNP barcode lists.
 
 ## Installation
 
