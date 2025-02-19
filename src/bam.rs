@@ -1,7 +1,6 @@
 //! This file is used to parse the BAM file, fetch reads that located in a given region
-//!
 
-use std::{env, fs::File, io::Write};
+use std::{env, io::Write};
 
 use rust_htslib::bam::{self, Read as BAMRead};
 
@@ -9,16 +8,13 @@ use crate::{barcode::BarcodeList, cli::BarcodeArgs};
 
 use url::Url;
 
-// use rust_htslib::tpool::*;
-
-// use clap::Parser::Url;
 
 pub fn check_file_format(path: &str) -> Result<String, std::io::Error> {
     // check the suffix of the file
     let suffix = path.split('.').last().unwrap();
     let suffix = suffix.to_uppercase();
 
-    eprint!("processing file format: {}", suffix);
+    eprint!("processing file format: {}\n", suffix);
 
     // check if the file is a bam file or cram file
     if suffix == "BAM" {
@@ -172,7 +168,12 @@ pub fn calculate_barcode(args: BarcodeArgs) {
         }
     }
 
-    let mut output = File::create(args.output).unwrap();
+
+    let mut output: Box<dyn std::io::Write> = match args.output {
+        Some(output_file) => Box::new(std::io::BufWriter::new(std::fs::File::create(output_file).unwrap())),
+        None => Box::new(std::io::BufWriter::new(std::io::stdout())),
+    };
+
     let filename = args.bam.file_name().unwrap().to_str().unwrap();
 
     if let Some(sample) = &args.sample_name {

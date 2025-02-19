@@ -23,8 +23,8 @@ It is inspired by [CCLHunter](https://doi.org/10.1016/j.csbj.2023.09.040), which
 ## Features
 
 - Calculate SNP barcode: Generate a unique SNP barcode for a sample using a sorted BAM or CRAM file. Specify the input file, barcode file, and output file. Optionally, provide a reference file for CRAM format.
-
 - Compare SNP barcodes: Identify potential sample swaps by comparing SNP barcodes of multiple samples. Specify multiple barcode files directly or provide a file containing a list of barcode files. The tool outputs a comparison file highlighting discrepancies.
+- Support reading BAM files from remote addresses and generating barcode files without downloading them locally.
 
 ## Installation
 

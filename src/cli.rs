@@ -33,7 +33,7 @@ pub struct BarcodeArgs {
 
     /// Output file
     #[arg(short, long)]
-    pub output: PathBuf,
+    pub output: Option<PathBuf>,
 
     /// Sample name(optional)
     /// if not provided, the sample name will be the file name
