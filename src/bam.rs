@@ -8,7 +8,6 @@ use crate::{barcode::BarcodeList, cli::BarcodeArgs};
 
 use url::Url;
 
-
 pub fn check_file_format(path: &str) -> Result<String, std::io::Error> {
     // check the suffix of the file
     let suffix = path.split('.').last().unwrap();
@@ -130,14 +129,25 @@ pub fn calculate_barcode(args: BarcodeArgs) {
     let tname = header_view.tid2name(0);
     let has_chr = tname.starts_with(b"chr");
 
+    if has_chr {
+        eprint!("alignment file has chr prefix in chromsome names\n");
+    } else {
+        eprint!("alignment file does not have chr prefix in chromsome names\n");
+    }
+
     if check_file_format(&args.bam.to_str().unwrap()).unwrap() == "CRAM" {
         bam.set_reference(args.reference.unwrap().to_str().unwrap())
             .unwrap();
     }
 
     let mut base_vec = Vec::new();
-    for barcode in &barcode_list.barcode_list {
-        eprint!("fetching barcode: {}:{}\n", barcode.chrom, barcode.pos);
+    for (idx, barcode) in barcode_list.barcode_list.clone().iter().enumerate() {
+        eprint!(
+            "fetching barcode(#{}): {}:{}\n",
+            idx + 1,
+            barcode.chrom,
+            barcode.pos
+        );
 
         let query_pos = if has_chr {
             format!("chr{}:{}-{}", barcode.chrom, barcode.pos, barcode.pos + 1)
@@ -150,9 +160,17 @@ pub fn calculate_barcode(args: BarcodeArgs) {
         for plup in bam.pileup() {
             let plup = plup.unwrap();
 
-            if String::from_utf8_lossy(header_view.tid2name(plup.tid())) == barcode.chrom
-                && plup.pos() == barcode.pos - 1
-            {
+            let tname = match has_chr {
+                true => String::from_utf8_lossy(
+                    header_view
+                        .tid2name(plup.tid())
+                        .strip_prefix(b"chr")
+                        .unwrap(),
+                ),
+                false => String::from_utf8_lossy(header_view.tid2name(plup.tid())),
+            };
+
+            if tname == barcode.chrom && plup.pos() == barcode.pos - 1 {
                 let bases: Vec<char> = plup
                     .alignments()
                     .filter_map(|alignment| {
@@ -168,9 +186,10 @@ pub fn calculate_barcode(args: BarcodeArgs) {
         }
     }
 
-
     let mut output: Box<dyn std::io::Write> = match args.output {
-        Some(output_file) => Box::new(std::io::BufWriter::new(std::fs::File::create(output_file).unwrap())),
+        Some(output_file) => Box::new(std::io::BufWriter::new(
+            std::fs::File::create(output_file).unwrap(),
+        )),
         None => Box::new(std::io::BufWriter::new(std::io::stdout())),
     };
 
