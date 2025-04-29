@@ -56,12 +56,21 @@ pub struct BarcodeArgs {
 #[derive(Parser, Debug, Clone)]
 pub struct CompareArgs {
     /// Input barcodes file. can be multiple
-    #[arg(short = 'i', long)]
+    #[arg(index = 1)]
     pub barcode: Option<Vec<PathBuf>>,
 
     /// Input manfiest file. each line is a barcode file
     #[arg(short = 'I', long)]
     pub barcode_list: Option<PathBuf>,
+
+    /// Reference barcode files
+    #[arg(short = 'R', long,long_help = "Reference barcode files for comparison
+If reference barcode files are provided, swapfinder will operate in query mode, 
+comparing each input file (specified via -I or positional arguments) individually 
+against the reference files.
+If no reference is provided, swapfinder will operate in compare mode, comparing 
+all input files (from -I or positional arguments) against each other.")]
+    pub ref_bcs: Option<PathBuf>, 
 
     /// Name of the output signal file
     #[arg(short, long)]

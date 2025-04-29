@@ -4,7 +4,10 @@ mod cli;
 mod compare;
 mod genotype;
 mod likelihood;
-use std::{io::BufRead, path::PathBuf};
+use std::{
+    io::{BufRead, Read},
+    path::{self, Path, PathBuf},
+};
 
 use bam::calculate_barcode;
 use clap::Parser;
@@ -24,6 +27,30 @@ fn main() {
                 barcode_file_list.extend(barcode_files.clone().into_iter());
             }
 
+            let mut ref_barcode_file_list: Vec<PathBuf> = Vec::new();
+
+            if let Some(ref_barcode_files) = args.ref_bcs.clone() {
+                let mut f = std::fs::File::open(ref_barcode_files)
+                    .expect("Failed to open reference barcode file.");
+
+                let mut ref_bc_files = String::new();
+                f.read_to_string(&mut ref_bc_files)
+                    .expect("Failed to read reference barcode file.");
+
+                ref_bc_files.split('\n').for_each(|f| {
+                    let path = Path::new(f.trim());
+                    if path.exists() {
+                        ref_barcode_file_list.push(path.to_path_buf());
+                    } else {
+                        eprintln!(
+                            "reference barcode file:{} not exists in the manifest file",
+                            path.to_str().unwrap()
+                        );
+                        std::process::exit(1);
+                    }
+                });
+            }
+
             if let Some(barcode_manifest_path) =
                 args.barcode_list.as_ref().map(|p| p.to_str().unwrap())
             {
@@ -39,11 +66,12 @@ fn main() {
                             "barcode file:{} not exists in the manifest file",
                             f.to_str().unwrap()
                         );
+                        std::process::exit(1);
                     }
                 }
             }
 
-            compare_main(barcode_file_list, args);
+            compare_main(barcode_file_list, ref_barcode_file_list, args);
         }
     }
 }

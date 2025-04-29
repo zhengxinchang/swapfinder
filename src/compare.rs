@@ -1,5 +1,4 @@
 //! compare all combinations of sample barcodes.
-//!
 
 use std::{io::BufRead, path::PathBuf};
 
@@ -82,7 +81,11 @@ pub fn calc_similarity(barcode1: Vec<String>, barcode2: Vec<String>) -> (f64, u3
     (intersection as f64 / union as f64, barcode1.len() as u32)
 }
 
-pub fn compare_main(barcode_file_list: Vec<PathBuf>, args: CompareArgs) {
+pub fn compare_main(
+    barcode_file_list: Vec<PathBuf>,
+    ref_barcode_list: Vec<PathBuf>,
+    args: CompareArgs,
+) {
     let mut barcode_vec = Vec::new();
 
     for barcode_file in barcode_file_list {
@@ -98,26 +101,65 @@ pub fn compare_main(barcode_file_list: Vec<PathBuf>, args: CompareArgs) {
         None => Box::new(std::io::BufWriter::new(std::io::stdout())),
     };
     // let mut output = std::io::BufWriter::new(std::io::stdout());
-    output
-        .write_all(b"Sample1\tSample2\tSimilarity_score\tNum_barcode\n")
-        .unwrap();
-    for i in 0..barcode_vec.len() {
-        for j in i + 1..barcode_vec.len() {
-            let (similarity, nbc) =
-                calc_similarity(barcode_vec[i].1.clone(), barcode_vec[j].1.clone());
-            // print the similarity as float
-            output
-                .write_all(
-                    format!(
-                        "{}\t{}\t{:.2}\t{}\n",
-                        barcode_vec[i].0,
-                        barcode_vec[j].0,
-                        similarity * 100.0,
-                        nbc
+
+    if ref_barcode_list.len() == 0 {
+        output.write_all(b"#Full-comparison mode\n").unwrap();
+
+        output
+            .write_all(b"Sample1\tSample2\tSimilarity_score\tNum_barcode\n")
+            .unwrap();
+
+        for i in 0..barcode_vec.len() {
+            for j in i + 1..barcode_vec.len() {
+                let (similarity, nbc) =
+                    calc_similarity(barcode_vec[i].1.clone(), barcode_vec[j].1.clone());
+                // print the similarity as float
+                output
+                    .write_all(
+                        format!(
+                            "{}\t{}\t{:.2}\t{}\n",
+                            barcode_vec[i].0,
+                            barcode_vec[j].0,
+                            similarity * 100.0,
+                            nbc
+                        )
+                        .as_bytes(),
                     )
-                    .as_bytes(),
-                )
-                .unwrap();
+                    .unwrap();
+            }
+        }
+    } else {
+        output.write_all(b"#Reference-comparison mode\n").unwrap();
+
+        output
+            .write_all(b"Sample1\tSample2\tSimilarity_score\tNum_barcode\n")
+            .unwrap();
+
+        let mut ref_barcode_vec = Vec::new();
+
+        for ref_barcode_file in ref_barcode_list {
+            let (sample, barcodes) = parse_barcode_file(ref_barcode_file.to_str().unwrap());
+            ref_barcode_vec.push((sample, barcodes));
+        }
+
+        for i in 0..barcode_vec.len() {
+            for j in 0..ref_barcode_vec.len() {
+                let (similarity, nbc) =
+                    calc_similarity(barcode_vec[i].1.clone(), ref_barcode_vec[j].1.clone());
+                // print the similarity as float
+                output
+                    .write_all(
+                        format!(
+                            "{}\t{}\t{:.2}\t{}\n",
+                            barcode_vec[i].0,
+                            ref_barcode_vec[j].0,
+                            similarity * 100.0,
+                            nbc
+                        )
+                        .as_bytes(),
+                    )
+                    .unwrap();
+            }
         }
     }
 }

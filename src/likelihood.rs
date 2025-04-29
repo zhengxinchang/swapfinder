@@ -36,7 +36,7 @@ fn genotype_likelihood(genotype: (char, char), reads: &Vec<ReadBase>) -> f64 {
 }
 
 pub fn calculate_likelihoods_all_genotype(read_bases: Vec<ReadBase>) -> Vec<Genotype> {
-    let nucleotides = vec!['A', 'C', 'G', 'T'];
+    let nucleotides: Vec<char> = vec!['A', 'C', 'G', 'T'];
     let mut genotype_combinations: Vec<(char, char)> = Vec::new();
 
     for (i, base1) in nucleotides.iter().enumerate() {

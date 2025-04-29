@@ -8,7 +8,7 @@ use crate::{barcode::BarcodeList, cli::BarcodeArgs};
 
 use crate::genotype::{self};
 use crate::likelihood::ReadBase;
-use crate::likelihood::{self, cal_genotypes_likelihood};
+use crate::likelihood::{self, calculate_likelihoods_all_genotype};
 use statrs::distribution::{ChiSquared, ContinuousCDF};
 use url::Url;
 
@@ -136,7 +136,7 @@ pub fn calculate_barcode(args: BarcodeArgs) {
 
                 if bases.len() >= args.min_depth {
                     // println!("{:?}",&bases);
-                    let mut gt_likelihoods = cal_genotypes_likelihood(bases);
+                    let mut gt_likelihoods = calculate_likelihoods_all_genotype(bases);
                     gt_likelihoods.sort_by(|a, b| {
                         let cmp = b.likelihood.partial_cmp(&a.likelihood).unwrap();
                         cmp
