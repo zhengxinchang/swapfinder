@@ -162,3 +162,12 @@ This project is open-source under the MIT license. For more details, please refe
 If you use `swapfinder` in your research, please cite the following paper:
 
 Congfan Bu, Xinchang Zheng, Jialin Mai, Zhi Nie, Jingyao Zeng, Qiheng Qian, Tianyi Xu, Yanling Sun, Yiming Bao, Jingfa Xiao, CCLHunter: An efficient toolkit for cancer cell line authentication, Computational and Structural Biotechnology Journal, 2023, https://doi.org/10.1016/j.csbj.2023.09.040.
+
+
+## contamination detection
+
+
+Load the pre-defined from barcode file.
+
+
+VCF for extract must be sorted by position.

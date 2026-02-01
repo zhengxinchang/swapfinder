@@ -1,22 +1,25 @@
-mod bam;
-mod barcode;
+mod profile;
+mod barcode_calc;
 mod cli;
-mod compare;
+mod sawp;
+mod contamination;
 mod genotype;
 mod likelihood;
+mod read_base;
+mod utils;
 use std::{
     io::{BufRead, Read},
     path::{self, Path, PathBuf},
 };
 
-use bam::calculate_barcode;
+use barcode_calc::calculate_barcode;
 use clap::Parser;
-use compare::compare_main;
+use sawp::compare_main;
 
 fn main() {
     let cli = cli::Cli::parse();
     match cli.command {
-        cli::Commands::barcode(args) => {
+        cli::Commands::profile(args) => {
             calculate_barcode(args);
         }
         cli::Commands::compare(args) => {
@@ -72,6 +75,9 @@ fn main() {
             }
 
             compare_main(barcode_file_list, ref_barcode_file_list, args);
+        }
+        cli::Commands::estcon(cont_est_args) => {
+            contamination::estimation(cont_est_args);
         }
     }
 }

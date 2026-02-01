@@ -27,3 +27,6 @@ test/
 **.bai
 **.bam
 barcodes/data/
+.vscode/
+a**
+b**

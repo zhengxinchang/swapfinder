@@ -1,29 +1,8 @@
 use crate::genotype::Genotype;
-#[derive(Debug, Clone, Copy)]
-pub struct ReadBase {
-    pub base: char,
-    pub phred: f64,
-}
+use crate::read_base::ReadBase;
 
-impl ReadBase {
-    fn phrad_to_prob(&self) -> f64 {
-        10.0_f64.powf(-self.phred / 10.0)
-    }
-
-    // if the ReadBase is same as expected base
-    fn expected_to_prob(&self, expected: &char) -> f64 {
-        let prob = self.phrad_to_prob();
-        if self.base == *expected {
-            return 1.0 - prob;
-        } else {
-            return prob / 3.0;
-        }
-    }
-}
-
-
-// A G 
-// A A A A A G G G G G 
+// A G
+// A A A A A G G G G G
 fn genotype_likelihood(genotype: (char, char), reads: &Vec<ReadBase>) -> f64 {
     let (a1, a2) = genotype;
     let likelihood = reads.iter().fold(1.0, |acc, read| {
