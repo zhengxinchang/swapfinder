@@ -10,3 +10,25 @@
 [ ] change the log likelihood ratio with sigmod or tanh function.
 use multiple distance methods to meature the distance between the barcodes
 
+
+
+# contaimination detection:
+
+
+一个fingerprint 首先查询到hpblock，hpblock之间不允许重叠，如果fingerprint跨越多个hpblock，则尝试merge hpblock
+
+一个hpblock内， 多个haplotype， 这些hp之间可能是overlap，也可能不是overlap的
+
+
+======================================================
+ *******************************hp1
+    ***********************hp2 
+                                     ***************hp3
+                     ******************hp4
+
+运行所有的overlap之后，进行haplotype的合并，根据其相似性合并，最终进行purge
+
+最后估计contamination
+
+等一下，
+其实没必要搞这么复杂， 不需要有hpblock，只需要每个chr搞一个haplotype集合就行了
