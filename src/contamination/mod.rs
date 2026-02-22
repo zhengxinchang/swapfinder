@@ -1,9 +1,9 @@
 pub mod cont_barcode;
 pub mod fingerprint;
-pub mod hap_block;
+pub mod haplotype;
 use cont_barcode::*;
 use fingerprint::*;
-use hap_block::*;
+use haplotype::*;
 
 use std::{env, io::Write};
 
@@ -92,7 +92,7 @@ pub fn estimation(args: EstConstArgs) {
 
                         let cigarview = record.cigar();
 
-                        let mut fingerprint = BitBaseFingerPrint::new(&hits_barcodes,2);
+                        let mut fingerprint = BitBaseFingerPrint::new(&hits_barcodes);
 
                         for barcode in hits_barcodes {
                             if let Ok(Some(read_pos)) =
@@ -106,7 +106,7 @@ pub fn estimation(args: EstConstArgs) {
                             }
                         }
 
-                        // fingerprint.
+                        // add figerprint to haplotype tree 
                     }
                 }
             }

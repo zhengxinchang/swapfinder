@@ -47,7 +47,7 @@ impl BitBaseFingerPrint {
         self.count += 1;
     }
 
-    pub fn get_base(&self, local_idx: usize) -> u8 {
+    pub fn get_base_char(&self, local_idx: usize) -> u8 {
         if local_idx >= self.count {
             panic!("Index out of bounds in BitBaseFingerPrint::get_base");
         }
@@ -68,13 +68,27 @@ impl BitBaseFingerPrint {
         }
     }
 
-    pub fn get_base_vec(&self,start: usize, length:usize) -> Vec<u8> {
+    pub fn get_base_raw(&self, local_idx: usize) -> u8 {
+        if local_idx >= self.count {
+            panic!("Index out of bounds in BitBaseFingerPrint::get_base");
+        }
+        let byte_index = local_idx / 2;
+        let is_high_nibble = local_idx % 2 == 0;
+        let byte = self.bitbase[byte_index];
+        if is_high_nibble {
+            (byte & 0b11110000) >> 4
+        } else {
+            byte & 0b00001111
+        }
+    }
+
+    pub fn get_base_vec_raw(&self,start: usize, length:usize) -> Vec<u8> {
         if start + length > self.count || length == 0 {
             panic!("Index out of bounds in BitBaseFingerPrint::get_base_vec");
         }
         let mut base_vec: Vec<u8> = Vec::new();
         for i in start..start+length {
-            base_vec.push(self.get_base(i));
+            base_vec.push(self.get_base_raw(i));
         }
         base_vec
     }
@@ -98,7 +112,7 @@ impl BitBaseFingerPrint {
     pub fn get_string(&self) -> String {
         let mut seq = String::new();
         for i in 0..self.count {
-            let base = self.get_base(i);
+            let base = self.get_base_char(i);
             seq.push(base as char);
         }
         seq
